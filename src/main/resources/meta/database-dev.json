@@ -1,0 +1,16 @@
+{
+    "url": "jdbc:postgresql://localhost:5432/GeniusPortfolio_Beta",
+    "type": "postgre",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "passwordHex": "Cy7XRhgwdGJE8lVLK6vttg==.fXBE4QRt9xIrruT6+se/FA==",
+    "database": "GeniusPortfolio_Beta",
+    "encrypt": false,
+    "trustServerCertificate": true,
+    "sslMode": "verify-full",
+    "sslRootCert": "/path/to/ca.crt",
+    "useSSL": false,
+    "allowPublicKeyRetrieval": true,
+    "serverTimezone": "UTC"
+}

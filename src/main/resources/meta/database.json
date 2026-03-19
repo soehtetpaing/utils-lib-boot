@@ -1,0 +1,16 @@
+{
+    "url": "jdbc:sqlserver://localhost:1433;databaseName=GeniusPortfolio_Beta",
+    "type": "mssql",
+    "host": "localhost",
+    "port": 1433,
+    "username": "sa",
+    "passwordHex": "Cy7XRhgwdGJE8lVLK6vttg==.fXBE4QRt9xIrruT6+se/FA==",
+    "database": "GeniusPortfolio_Beta",
+    "encrypt": false,
+    "trustServerCertificate": true,
+    "sslMode": "verify-full",
+    "sslRootCert": "/path/to/ca.crt",
+    "useSSL": false,
+    "allowPublicKeyRetrieval": true,
+    "serverTimezone": "UTC"
+}

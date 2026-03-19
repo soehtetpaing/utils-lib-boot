@@ -1,0 +1,20 @@
+10:29:50 PM 99806 MS   [GeniusUtils@1.0.2][Connection]     Start
+10:29:51 PM 00205 MS   [GeniusUtils@1.0.2][Connection]     [RequestID: 251201222950991][Method: connect][RequestBy: Utils@1.1.0]     RequestParam: {"Request":{"url":null,"secretKey":"OhMyGenius!","type":"mssql","host":"localhost","port":1433,"username":"sa","passwordHex":"Cy7XRhgwdGJE8lVLK6vttg==.fXBE4QRt9xIrruT6+se/FA==","database":"GeniusPortfolio_Beta","encrypt":false,"trustServerCertificate":true,"sslMode":null,"sslRootCert":null,"useSSL":false,"allowPublicKeyRetrieval":false,"serverTimezone":null}}
+10:29:51 PM 04043 MS   [GeniusUtils@1.0.2][Connection]     [RequestID: 251201222950991][Method: connect][RequestBy: Utils@1.1.0]     Output: {"Response":{"status":200,"message":"Connected."}}
+10:29:51 PM 04644 MS   [GeniusUtils@1.0.2][Connection]     [Execute Time: 53 ms]
+10:29:51 PM 04744 MS   [GeniusUtils@1.0.2][Connection]     End
+10:29:58 PM 21724 MS   [GeniusUtils@1.0.2][Migration]     Start
+10:29:58 PM 21843 MS   [GeniusUtils@1.0.2][Migration]     [RequestID: 251201222958217][Method: insertDetail][RequestBy: Utils@1.1.0]     RequestParam: {"Request":{"name":"Utils","version":"1.1.0","depth":2,"logging":false}}
+10:29:58 PM 22191 MS   [GeniusUtils@1.0.2][Migration]     [RequestID: 251201222958217][Method: insertDetail][RequestBy: Utils@1.1.0]     Output: {"Response":{"status":200,"message":"Version migration success."}}
+10:29:58 PM 22491 MS   [GeniusUtils@1.0.2][Migration]     [Execute Time: 6 ms]
+10:29:58 PM 22591 MS   [GeniusUtils@1.0.2][Migration]     End
+11:01:20 PM 86183 MS   [GeniusUtils@1.0.2][Connection]     Start
+11:01:20 PM 86505 MS   [GeniusUtils@1.0.2][Connection]     [RequestID: 251201230120856][Method: connect][RequestBy: Utils@1.1.0]     RequestParam: {"Request":{"url":null,"secretKey":"OhMyGenius!","type":"mssql","host":"localhost","port":1433,"username":"sa","passwordHex":"Cy7XRhgwdGJE8lVLK6vttg==.fXBE4QRt9xIrruT6+se/FA==","database":"GeniusPortfolio_Beta","encrypt":false,"trustServerCertificate":true,"sslMode":null,"sslRootCert":null,"useSSL":false,"allowPublicKeyRetrieval":false,"serverTimezone":null}}
+11:01:20 PM 88819 MS   [GeniusUtils@1.0.2][Connection]     [RequestID: 251201230120856][Method: connect][RequestBy: Utils@1.1.0]     Output: {"Response":{"status":200,"message":"Connected."}}
+11:01:20 PM 89270 MS   [GeniusUtils@1.0.2][Connection]     [Execute Time: 35 ms]
+11:01:20 PM 89369 MS   [GeniusUtils@1.0.2][Connection]     End
+11:01:21 PM 22051 MS   [GeniusUtils@1.0.2][Migration]     Start
+11:01:21 PM 22156 MS   [GeniusUtils@1.0.2][Migration]     [RequestID: 251201230121220][Method: migrateVersion][RequestBy: Utils@1.1.0]     RequestParam: {"Request":{"name":"Utils","version":"1.1.0","depth":2,"logging":false}}
+11:01:21 PM 22353 MS   [GeniusUtils@1.0.2][Migration]     [RequestID: 251201230121220][Method: migrateVersion][RequestBy: Utils@1.1.0]     Output: {"Response":{"status":201,"message":"No need to migrate!"}}
+11:01:21 PM 22457 MS   [GeniusUtils@1.0.2][Migration]     [Execute Time: 4 ms]
+11:01:21 PM 22556 MS   [GeniusUtils@1.0.2][Migration]     End

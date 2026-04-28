@@ -3,17 +3,28 @@ package com.genius.utils.lib;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.genius.utils.model.ApiToken;
+import com.genius.utils.model.App;
+import com.genius.utils.model.JwtUser;
 import com.genius.utils.model.VerifyApiToken;
 
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,6 +35,9 @@ public class AuthHandler {
     private static final int IV_LENGTH = 16;
     private static final String SECRET_KEY = "OhMyGenius!";
     private static final long TIME_LIMIT =  15L * 60 * 1000; // 15 minutes, 24L * 60 * 60 * 1000 = 1 day
+
+    private static final long JWT_ACCESS_EXPIRED_MIN = 15;
+    private static final long JWT_REFRESH_EXPIRED_DAY = 7;
 
     // get uuid by Genius iQ @20251107
     public static String getUniqueId() {
@@ -176,5 +190,138 @@ public class AuthHandler {
         MessageDigest sha = MessageDigest.getInstance(HASH_ALGORITHM);
         byte[] keyBytes = sha.digest(secret.getBytes(StandardCharsets.UTF_8));
         return new SecretKeySpec(keyBytes, KEY_ALGORITHM);
+    }
+
+    public static String getJwtSecret() {
+        byte[] bytes = new byte[32];
+        new SecureRandom().nextBytes(bytes);
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+    
+    public static String getRefreshSecret() {
+        byte[] bytes = new byte[32];
+        new SecureRandom().nextBytes(bytes);
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+    
+    public static String getApiSecret() {
+        byte[] bytes = new byte[16];
+        new SecureRandom().nextBytes(bytes);
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    public static Map<String, Object> generateJwtToken(JwtUser user) {
+        return generateJwtToken(user, null, null);
+    }
+    
+    public static Map<String, Object> generateJwtToken(JwtUser user, String jwtSecret, String refreshSecret) {
+        Map<String, Object> result = new HashMap<>();
+        
+        if (user == null || user.getId() == null) {
+            result.put("status", 401);
+            result.put("message", "Invalid user provided!");
+            return result;
+        }
+
+        App app = MediaHandler.readJSON("config/app.config.json", new TypeReference<App>() {});     
+        String JWT_SECRET = (jwtSecret != null) ? jwtSecret : app.getJwtSecret();
+        String REFRESH_SECRET = (refreshSecret != null) ? refreshSecret : app.getRefreshSecret();
+        
+        if (JWT_SECRET == null || REFRESH_SECRET == null) {
+            result.put("status", 401);
+            result.put("message", "JWT_SECRET and REFRESH_SECRET must be configured!");
+            return result;
+        }
+        
+        // Generate Access Token
+        String accessToken = generateAccessToken(user, JWT_SECRET);
+        
+        // Generate Refresh Token
+        String refreshToken = generateRefreshToken(user, REFRESH_SECRET);
+        
+        Map<String, Object> tokens = new HashMap<>();
+        tokens.put("accessToken", accessToken);
+        tokens.put("refreshToken", refreshToken);
+        
+        result.put("status", 200);
+        result.put("tokens", tokens);
+        
+        return result;
+    }
+
+    private static String generateAccessToken(JwtUser user, String secret) {
+        Instant now = Instant.now();
+        Instant expiration = now.plus(JWT_ACCESS_EXPIRED_MIN, ChronoUnit.MINUTES);
+        
+        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.builder()
+                .subject(user.getId().toString())
+                .claim("userId", user.getId())
+                .claim("username", user.getUsername())
+                .claim("role", user.getRole() != null ? user.getRole() : "user")
+                .claim("type", "access")
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(expiration))
+                .signWith(key, Jwts.SIG.HS256)
+                .compact();
+    }
+    
+    private static String generateRefreshToken(JwtUser user, String secret) {
+        Instant now = Instant.now();
+        Instant expiration = now.plus(JWT_REFRESH_EXPIRED_DAY, ChronoUnit.DAYS);
+        
+        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        
+        return Jwts.builder()
+                .subject(user.getId().toString())
+                .claim("userId", user.getId())
+                .claim("type", "refresh")
+                .claim("version", user.getTokenVersion() != null ? user.getTokenVersion() : 1)
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(expiration))
+                .signWith(key, Jwts.SIG.HS256)
+                .compact();
+    }
+
+    public static Map<String, Object> verifyJwtToken(String token, String secret) {
+        Map<String, Object> result = new HashMap<>();
+        
+        if (token == null || token.isEmpty()) {
+            result.put("status", 401);
+            result.put("message", "Invalid token provided!");
+            return result;
+        }
+        
+        if (secret == null || secret.isEmpty()) {
+            result.put("status", 401);
+            result.put("message", "Invalid secret provided!");
+            return result;
+        }
+        
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+            
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            
+            result.put("status", 200);
+            result.put("message", "JWT verified.");
+            result.put("decoded", claims);
+            
+            return result;
+        } catch (ExpiredJwtException e) {
+            result.put("status", 403);
+            result.put("message", "Token expired!");
+            result.put("expired", true);
+            return result;
+        } catch (MalformedJwtException | SignatureException | IllegalArgumentException e) {
+            result.put("status", 401);
+            result.put("message", "Invalid token!");
+            return result;
+        }
     }
 }

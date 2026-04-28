@@ -32,7 +32,7 @@ public class MigrateHandler {
     public static MigrateResult migrateVersion(DatabaseInfo databaseInfo, MigrateInfo migrateInfo) {
         result = new MigrateResult();
         
-        App app = MediaHandler.readJSON("meta/app.json", new TypeReference<App>() {});
+        App app = MediaHandler.readJSON("config/app.config.json", new TypeReference<App>() {});
         projectName = app.getName() + "@" + app.getVersion();
         
         DeviceInfo deviceInfo = CommonHandler.getDeviceInfo();

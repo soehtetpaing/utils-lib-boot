@@ -14,8 +14,8 @@ public class MediaMain {
     public static void main(String[] args) throws IOException {
         log.info(MediaHandler.generateMediaName("IMG", "png"));
         log.info("Directory Making Status: " + MediaHandler.makeDirectory("logs"));
-        log.info("meta/app.json exists: " + MediaHandler.mediaExists("meta/app.json"));
-        App app = MediaHandler.readJSON("meta/app.json", new TypeReference<App>() {});
+        log.info("config/app.config.json exists: " + MediaHandler.mediaExists("config/app.config.json"));
+        App app = MediaHandler.readJSON("config/app.config.json", new TypeReference<App>() {});
         log.info("Read JSON: " + CommonHandler.toJSON(app));
         log.info("Read Text: " + MediaHandler.readText("static/test.txt"));
         log.info("Read Image: " + MediaHandler.readImage("media/image/iu.png"));

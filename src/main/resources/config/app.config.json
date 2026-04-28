@@ -1,0 +1,9 @@
+{
+    "name": "Genius Utils",
+    "version": "1.0.5",
+    "secretKey": "OhMyGenius!",
+    "workerId": 1,
+    "datacenterId": 1,
+    "jwtSecret": "WtDkg4GfiYoLNRPyZ+zbUU5cSgI4FGqmfWIVw2XATBw=",
+    "refreshSecret": "KNm7pAMV08fFoV0d1RPhAl7VUNTGiaUEnuVmAmlsOjU="
+}

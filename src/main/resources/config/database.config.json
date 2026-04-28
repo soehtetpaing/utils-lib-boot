@@ -1,0 +1,34 @@
+{
+    "dev": {
+        "url": "jdbc:postgresql://localhost:5432/GeniusPortfolio_Beta",
+        "type": "postgre",
+        "host": "localhost",
+        "port": 5432,
+        "username": "postgres",
+        "passwordHex": "dzg7xj1zIyhvyRx0l3EL4muepulIdcfiplxRYe7ug34=",
+        "database": "GeniusPortfolio_Beta",
+        "encrypt": false,
+        "trustServerCertificate": true,
+        "sslMode": "verify-full",
+        "sslRootCert": "/path/to/ca.crt",
+        "useSSL": false,
+        "allowPublicKeyRetrieval": true,
+        "serverTimezone": "UTC"
+    },
+    "prod": {
+        "url": "jdbc:sqlserver://localhost:1433;databaseName=GeniusPortfolio_Beta",
+        "type": "mssql",
+        "host": "localhost",
+        "port": 1433,
+        "username": "sa",
+        "passwordHex": "dzg7xj1zIyhvyRx0l3EL4muepulIdcfiplxRYe7ug34=",
+        "database": "GeniusPortfolio_Beta",
+        "encrypt": false,
+        "trustServerCertificate": true,
+        "sslMode": "verify-full",
+        "sslRootCert": "/path/to/ca.crt",
+        "useSSL": false,
+        "allowPublicKeyRetrieval": true,
+        "serverTimezone": "UTC"
+    }
+}

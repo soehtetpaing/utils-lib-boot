@@ -11,4 +11,8 @@ public class App {
     private String name;
     private String version;
     private String secretKey;
+    private long workerId;
+    private long datacenterId;
+    private String jwtSecret;
+    private String refreshSecret;
 }

@@ -3,6 +3,7 @@ package com.genius.utils;
 import java.util.LinkedHashMap;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.genius.utils.lib.CommonHandler;
 import com.genius.utils.lib.MediaHandler;
 import com.genius.utils.lib.MigrateHandler;
@@ -16,8 +17,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MigrateMain {
     public static void main(String[] args) {
-        App app = MediaHandler.readJSON("meta/app.json", new TypeReference<App>() {});
-        LinkedHashMap<String, Object> database = MediaHandler.readJSON("meta/database.json", new TypeReference<LinkedHashMap<String, Object>>() {});
+        App app = MediaHandler.readJSON("config/app.config.json", new TypeReference<App>() {});
+        LinkedHashMap<String, Object> rawdb = MediaHandler.readJSON(
+            "config/database.config.json", 
+            new TypeReference<LinkedHashMap<String, Object>>() {});
+        
+        String env = "dev"; // or "prod"
+        ObjectMapper mapper = new ObjectMapper();
+        LinkedHashMap<String, Object> database = mapper.convertValue(
+            rawdb.get(env), 
+            new TypeReference<LinkedHashMap<String, Object>>() {});
 
         DatabaseInfo databaseInfo = new DatabaseInfo();
         databaseInfo.setSecretKey(app.getSecretKey());

@@ -11,9 +11,17 @@ import com.genius.utils.model.User;
 
 @Slf4j
 public class CommonHandler {
+    private static final SnowFlake DEFAULT = new SnowFlake();
+
     // get syskey by Genius iQ @20250508
     public static long getSyskey() {
-        return Long.parseLong(DateTimeHandler.getMyanmarTimestamp().substring(2, 17));
+        return DEFAULT.nextId();
+    }
+
+    // get syskey by Genius iQ @20260428
+    public static long getSyskey(long workerId, long datacenterId) {
+        SnowFlake snowfake = new SnowFlake(workerId, datacenterId);
+        return snowfake.nextId();
     }
 
     // get super admin by Genius iQ @20250515

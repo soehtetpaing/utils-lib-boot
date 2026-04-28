@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonMain {
     public static void main(String[] args) {
         log.info("syskey: " + CommonHandler.getSyskey());
+        log.info("syskey: " + CommonHandler.getSyskey(2, 1));
         log.info("Super Admin: " + CommonHandler.getSuperAdmin());
         log.info("Super Admin: " + CommonHandler.toJSON(CommonHandler.getSuperAdmin()));
         log.info("Device Info: " + CommonHandler.getDeviceInfo());

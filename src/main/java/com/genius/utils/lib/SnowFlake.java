@@ -24,8 +24,9 @@ public class SnowFlake {
 
     private static final long SEQUENCE_MASK = ~(-1L << SEQUENCE_BITS);
 
-    // Custom epoch (e.g. Jun 24, 2024)
-    private static final long EPOCH = 1719187200000L;
+    // Custom Epoch
+    // private static final long EPOCH = 1719187200000L; // Jun 24, 2024
+    private static final long EPOCH = 1753987200000L; // Jul 25, 2025
 
     public SnowFlake() {
         this(1, 1); // default fallback
